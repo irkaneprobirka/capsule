@@ -26,14 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
       ],
     ]) ?>
   </p>
-  <div class="card mb-3" style="max-width: 1200px;">
+  <div class="card mb-3 rounded rounded-3 shadow-lg bg-white rounded" style="max-width: 900px;">
     <div class="row g-0">
-      <div class="col-md-4">
-        <?= Html::img('@web/img/' . Html::encode($model->image_clothes), ['style' => 'width: 400px; height: 400px;']) ?>
+      <div class="col">
+        <?= Html::img('@web/img/' . Html::encode($model->image_clothes), ['style' => 'width: 450px; height: 450px;', 'class' => 'rounded-start']) ?>
       </div>
-      <div class="col-md-8">
+      <div class="col">
         <div class="card-body">
-          <h5 class="card-title">Название: <?= Html::encode($model->title) ?></h5>
+          <h5 class="card-title fs-6 fw-bold">Название: <?= Html::encode($model->title) ?></h5>
           <p class="card-text"><?= Html::encode(CategoryClothes::getCategoryClothes()[$model->category_clothes_id]) ?></p>
           <p class="card-text"><small class="text-muted">Дата создания: <?= date('Y.m.d H:i:s', strtotime(Html::encode($model->created_at))) ?></small></p>
         </div>

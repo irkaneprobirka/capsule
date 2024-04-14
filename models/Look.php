@@ -25,6 +25,12 @@ use Yii;
  */
 class Look extends \yii\db\ActiveRecord
 {
+
+    public $season;
+    public $type;
+    public $age;
+    public $gender;
+
     /**
      * {@inheritdoc}
      */
@@ -39,12 +45,10 @@ class Look extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'description', 'like', 'dislike', 'cost', 'user_id', 'description_id'], 'required'],
-            [['like', 'dislike', 'cost', 'user_id', 'description_id'], 'integer'],
+            [['title', 'description','season', 'age', 'type', 'gender'], 'required'],
+            [[ 'user_id', 'description_id'], 'integer'],
             [['created_at'], 'safe'],
             [['title', 'description'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
-            [['description_id'], 'exist', 'skipOnError' => true, 'targetClass' => Description::class, 'targetAttribute' => ['description_id' => 'id']],
         ];
     }
 
@@ -55,11 +59,11 @@ class Look extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'description' => 'Description',
-            'like' => 'Like',
-            'dislike' => 'Dislike',
-            'cost' => 'Cost',
+            'title' => 'Название',
+            'description' => 'Описание',
+            'like' => 'Лайк',
+            'dislike' => 'Дизлайк',
+            'cost' => 'Стоимость образа',
             'user_id' => 'User ID',
             'created_at' => 'Created At',
             'description_id' => 'Description ID',

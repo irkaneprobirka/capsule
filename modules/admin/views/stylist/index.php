@@ -43,16 +43,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Логин',
                 'value' => fn ($model) => Html::encode($model->login),
             ],
-            // [
-            //     'label' => 'Роль в системе',
-            //     'value' => function ($user){
-            //         if(!empty($userRole = $user->getRoless()[0])){
-            //             return $userRole;
-            //         }else{
-            //             VarDumper::dump($userRole, 10, true);
-            //         }
-            //     }
-            // ],
+            [
+                'label' => 'Роль в системе',
+                'value' => function ($model){
+                    $userRoles = Yii::$app->authManager->getRolesByUser($model->id);
+                    foreach ($userRoles as $value) {
+                        return $value->description;
+                    }
+                }
+            ],
             // 'name',
             // 'surname',
             // 'patronymic',

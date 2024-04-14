@@ -61,7 +61,7 @@ class RbacController extends Controller
         $auth->addChild($client, $canClient);
         $auth->addChild($stylist, $canStylist);
 
-        $auth->assign($admin, Yii::$app->user->identity->id);
+        $auth->assign($admin, User::findByUsername('admin')->id);
         $auth->assign($client, User::findByUsername('123')->id);
         $auth->assign($stylist, User::findByUsername('stylist')->id);
 

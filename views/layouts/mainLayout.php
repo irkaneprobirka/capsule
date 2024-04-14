@@ -79,7 +79,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
         <!-- Sidebar Start -->
-        <aside class="left-sidebar rounded-end rounded-3 ">
+        <aside class="left-sidebar rounded-end rounded-3">
             <!-- Sidebar scroll-->
             <div>
                 <div class="brand-logo d-flex align-items-center justify-content-between">
@@ -155,7 +155,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                             <li class="nav-item dropdown">
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
                                     <?= !Yii::$app->user->isGuest
-                                        ? Html::img('@web/img/' . $userImage, ['style' => 'height: 35px; width: 35px;', 'class' => 'rounded-circle'])
+                                        ? Html::img('@web/img/' . $userImage, ['style' => 'height: 45px; width: 45px;', 'class' => 'rounded-circle'])
                                         : '<img src="../../web/src/assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">';
                                     ?>
                                 </a>
