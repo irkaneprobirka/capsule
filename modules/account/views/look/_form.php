@@ -4,8 +4,8 @@ use app\models\Age;
 use app\models\Gender;
 use app\models\Season;
 use app\models\Type;
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap5\Html;
+use yii\bootstrap5\ActiveForm;
 use yii\widgets\ListView;
 
 /** @var yii\web\View $this */
@@ -19,7 +19,7 @@ use yii\widgets\ListView;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'description')->textarea() ?>
 
     <?= $form->field($model, 'season')->dropDownList(Season::getSeason(), ['prompt' => 'Выберите сезон']) ?>
 
@@ -32,7 +32,7 @@ use yii\widgets\ListView;
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'itemOptions' => ['class' => 'item'],
-        'layout' => "<div class='d-flex flex-row '>{items}</div>",
+        'layout' => "<div class='d-flex flex-wrap '>{items}</div>",
         'itemView' => 'item',
     ]) ?>
 

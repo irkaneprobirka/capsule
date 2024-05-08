@@ -1,8 +1,14 @@
 <?php
 
-use app\models\CategoryClothes;
-use yii\helpers\Html;
+
 use yii\widgets\DetailView;
+use app\models\Age;
+use app\models\CategoryClothes;
+use app\models\Description;
+use app\models\Gender;
+use app\models\Season;
+use app\models\Type;
+use yii\bootstrap5\Html;
 
 /** @var yii\web\View $this */
 /** @var app\models\Clothes $model */
@@ -16,16 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
   <h1><?= Html::encode($this->title) ?></h1>
 
-  <p>
-    <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-      'class' => 'btn btn-danger',
-      'data' => [
-        'confirm' => 'Are you sure you want to delete this item?',
-        'method' => 'post',
-      ],
-    ]) ?>
-  </p>
   <div class="card mb-3 rounded rounded-3 shadow-lg bg-white rounded" style="max-width: 900px;">
     <div class="row g-0">
       <div class="col">
@@ -33,14 +29,28 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
       <div class="col">
         <div class="card-body">
-          <h5 class="card-title fs-6 fw-bold">Название: <?= Html::encode($model->title) ?></h5>
-          <p class="card-text"><?= Html::encode(CategoryClothes::getCategoryClothes()[$model->category_clothes_id]) ?></p>
-          <p class="card-text"><small class="text-muted">Дата создания: <?= date('Y.m.d H:i:s', strtotime(Html::encode($model->created_at))) ?></small></p>
+          <h5 class="card-title"><?= Html::encode($model->title) ?></h5>
+          <div class="d-flex flex-wrap mb-3">
+            <span class="badge bg-info rounded-pill m-1"><?= Season::getSeason()[Description::findOne($model->description_id)->season_id] ?></span>
+            <span class="badge bg-info rounded-pill m-1"><?= Type::getType()[Description::findOne($model->description_id)->type_id] ?></span>
+            <span class="badge bg-info rounded-pill m-1"><?= Age::getAge()[Description::findOne($model->description_id)->age_id] ?></span>
+            <span class="badge bg-info rounded-pill m-1"><?= Gender::getGender()[Description::findOne($model->description_id)->gender_id] ?></span>
+          </div>
+          <p>
+            <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Удалить вещь', ['delete', 'id' => $model->id], [
+              'class' => 'btn btn-danger',
+              'data' => [
+                'confirm' => 'Вы уверены что хотите удалить вещь? Будут удалены также образы, использующие ее',
+                'method' => 'post',
+              ],
+            ]) ?>
+          </p>
         </div>
       </div>
     </div>
   </div>
-  
+
   <? DetailView::widget([
     'model' => $model,
     'attributes' => [

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "category_stylist".
@@ -55,5 +56,14 @@ class CategoryStylist extends \yii\db\ActiveRecord
     public function getStylists()
     {
         return $this->hasMany(Stylist::class, ['category_stylist_id' => 'id']);
+    }
+
+    public static function getStylistCategory()
+    {
+        return (new Query())
+            ->select('title')
+            ->from('category_stylist')
+            ->indexBy('id')
+            ->column();
     }
 }

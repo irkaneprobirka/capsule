@@ -50,7 +50,7 @@ class Clothes extends \yii\db\ActiveRecord
             [['user_id', 'category_clothes_id', 'cost', 'description_id'], 'integer'],
             [['created_at'], 'safe'],
             [['title', 'brand'], 'string', 'max' => 255],
-            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
+            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
 
         ];
     }

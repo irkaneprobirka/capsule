@@ -45,7 +45,7 @@ class Look extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'description','season', 'age', 'type', 'gender'], 'required'],
+            [['title', 'description','season', 'age', 'type', 'gender',], 'required'],
             [[ 'user_id', 'description_id'], 'integer'],
             [['created_at'], 'safe'],
             [['title', 'description'], 'string', 'max' => 255],

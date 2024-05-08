@@ -20,6 +20,9 @@ $config = [
         'account' => [
             'class' => 'app\modules\account\Module',
         ],
+        'stylist' => [
+            'class' => 'app\modules\stylist\Module',
+        ],
     ],
     'components' => [
         'request' => [

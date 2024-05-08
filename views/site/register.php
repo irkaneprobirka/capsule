@@ -9,7 +9,7 @@ $this->title = 'Регистрация';
 /** @var ActiveForm $form */
 ?>
 <div class="site-login">
-    <div class="row">
+    <div class="row d-flex justify-content-center">
         <div class="col-lg-5">
             <h1><?= Html::encode($this->title) ?></h1>
             <?php $form = ActiveForm::begin(

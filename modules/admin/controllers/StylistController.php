@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\Stylist;
 use app\models\User;
 use app\modules\admin\models\StylistSearch;
 use Yii;
@@ -147,5 +148,27 @@ class StylistController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionStylist($id)
+    {
+        $model = new Stylist();
+        $modelUser = User::findOne($id);
+
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post())) {
+                $model->user_id = $modelUser->id;
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', 'Категория успешно назначена');
+                    return $this->redirect(['index', 'id' => $model->id]);
+                }
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
+
+        return $this->render('stylist', [
+            'model' => $model,
+        ]);
     }
 }

@@ -3,15 +3,17 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "look_comment".
  *
  * @property int $id
- * @property int $parent_id
+ * @property int|null $parent_id
  * @property string $comment
  * @property int $user_id
  * @property int $look_id
+ * @property string $created_at
  *
  * @property Look $look
  * @property LookComment[] $lookComments
@@ -34,9 +36,10 @@ class LookComment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'comment', 'user_id', 'look_id'], 'required'],
             [['parent_id', 'user_id', 'look_id'], 'integer'],
+            [['comment', 'user_id', 'look_id'], 'required'],
             [['comment'], 'string'],
+            [['created_at'], 'safe'],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => LookComment::class, 'targetAttribute' => ['parent_id' => 'id']],
             [['look_id'], 'exist', 'skipOnError' => true, 'targetClass' => Look::class, 'targetAttribute' => ['look_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
@@ -50,10 +53,11 @@ class LookComment extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'parent_id' => 'Parent ID',
-            'comment' => 'Comment',
-            'user_id' => 'User ID',
+            'parent_id' => 'Ответ на комментарий пользователя:',
+            'comment' => 'Комментарий',
+            'user_id' => 'Логин пользователя',
             'look_id' => 'Look ID',
+            'created_at' => 'Дата создания',
         ];
     }
 
@@ -95,5 +99,10 @@ class LookComment extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function getChildren(): ActiveQuery
+    {
+        return $this->hasMany(LookComment::class, ['parent_id' => 'id']);
     }
 }

@@ -1,0 +1,7 @@
+@media screen and (max-width: 980px) {
+    .post-card {
+        display: flex;
+        width: 18rem;
+        flex-direction: column !important;
+    }
+  }

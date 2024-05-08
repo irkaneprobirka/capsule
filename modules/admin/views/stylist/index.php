@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\VarDumper;
+use yii\widgets\ListView;
 use yii\widgets\Pjax;
 
 use function PHPSTORM_META\type;
@@ -20,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 class="d-flex justify-content-center"><?= Html::encode($this->title) ?></h1>
 
     <p>
         <? Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
@@ -30,48 +31,28 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); 
     ?>
 
-    <?= GridView::widget([
+    <?= ListView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            [
-                'label' => 'Номер',
-                'value' => fn ($model) => Html::encode($model->id),
-            ],
-            [
-                'label' => 'Логин',
-                'value' => fn ($model) => Html::encode($model->login),
-            ],
-            [
-                'label' => 'Роль в системе',
-                'value' => function ($model){
-                    $userRoles = Yii::$app->authManager->getRolesByUser($model->id);
-                    foreach ($userRoles as $value) {
-                        return $value->description;
-                    }
-                }
-            ],
-            // 'name',
-            // 'surname',
-            // 'patronymic',
-            // 'login',
-            //'email:email',
-            //'phone',
-            //'image_profile',
-            //'password',
-            //'role_id',
-            //'auth_key',
-            [
-                'label' => 'Действия',
-                'format' => 'raw',
-                'value' => fn ($model) =>
-                Html::a('Просмотр', ['view', 'id' => $model->id], ['class' => 'btn btn-outline-info m-1'])
-                    .
-                Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-primary m-1'])
-            ],
-        ],
-    ]); ?>
+        'itemOptions' => ['class' => 'item'],
+        'layout' => "<div class='card w-100 justify-content-center'><div class='card-body p-4'><div class='table-responsive'>
+    <table class='table text-nowrap mb-0 align-middle'><thead class='text-dark fs-4'>
+    <tr><th class='border-bottom-0 w-25'>
+            <h6 class='fw-semibold mb-0'>Id</h6>
+        </th>
+        <th class='border-bottom-0'>
+            <h6 class='fw-semibold mb-0'>Роль пользователя</h6>
+        </th>
+        <th class='border-bottom-0'>
+            <h6 class='fw-semibold mb-0'>Действия</h6>
+        </th>
+        <th class='border-bottom-0'>
+        <h6 class='fw-semibold mb-0'>Категория</h6>
+    </th>
+    </tr>
+</thead>
+<tbody>{items}</tbody></table></div></div></div>{pager}",
+        'itemView' => 'item',
+    ]) ?>
 
     <?php Pjax::end(); ?>
 

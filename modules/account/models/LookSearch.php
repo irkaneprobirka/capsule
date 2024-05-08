@@ -5,6 +5,7 @@ namespace app\modules\account\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Look;
+use Yii;
 
 /**
  * LookSearch represents the model behind the search form of `app\models\Look`.
@@ -70,9 +71,10 @@ class LookSearch extends Look
             'like' => $this->like,
             'dislike' => $this->dislike,
             'cost' => $this->cost,
-            'user_id' => $this->user_id,
+            'user_id' =>  Yii::$app->user->identity->id,
             'created_at' => $this->created_at,
             'description_id' => $this->description_id,
+            'is_active' => $this->is_active,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])

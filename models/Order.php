@@ -14,6 +14,8 @@ use Yii;
  * @property int $status_id
  * @property int $cost
  * @property string $created_at
+ * @property string $wish_client
+ * @property string|null $answer_stylist
  *
  * @property Look $look
  * @property Status $status
@@ -22,6 +24,7 @@ use Yii;
  */
 class Order extends \yii\db\ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
@@ -36,9 +39,10 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'stylist_id', 'status_id', 'cost'], 'required'],
+            [['user_id', 'stylist_id', 'cost', 'wish_client'], 'required'],
             [['user_id', 'stylist_id', 'look_id', 'status_id', 'cost'], 'integer'],
             [['created_at'], 'safe'],
+            [['wish_client', 'answer_stylist'], 'string'],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
             [['look_id'], 'exist', 'skipOnError' => true, 'targetClass' => Look::class, 'targetAttribute' => ['look_id' => 'id']],
@@ -53,12 +57,14 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
-            'stylist_id' => 'Stylist ID',
-            'look_id' => 'Look ID',
-            'status_id' => 'Status ID',
-            'cost' => 'Cost',
-            'created_at' => 'Created At',
+            'user_id' => 'Логин пользователя',
+            'stylist_id' => 'Стилист',
+            'look_id' => 'Образ',
+            'status_id' => 'Статус',
+            'cost' => 'Стоимость',
+            'created_at' => 'Время создания',
+            'wish_client' => 'Пожелания клиента',
+            'answer_stylist' => 'Обратная связь',
         ];
     }
 
