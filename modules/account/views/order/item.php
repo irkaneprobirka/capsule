@@ -1,6 +1,7 @@
 <?php
 
 use app\models\CategoryStylist;
+use app\models\Order;
 use app\models\Status;
 use app\models\Stylist;
 use app\models\User;
@@ -18,19 +19,6 @@ use yii\helpers\VarDumper;
     <td class="border-bottom-0">
         <h6 class="fw-semibold mb-0"><?= Html::encode(Status::getStatus()[$model->status_id]) ?></h6>
     </td>
-    <td class="border-bottom-0">
-                          <div class="d-flex align-items-center gap-2">
-                            <?= $model->status_id == 1
-                            ? '<span class="badge bg-info rounded-3 fw-semibold">Средний</span>'
-                            : '' ?>
-                            <?= $model->status_id == 2
-                            ? '<span class="badge bg-danger rounded-3 fw-semibold">Высокий</span>'
-                            : '' ?>
-                            <?= $model->status_id == 3
-                            ? '<span class="badge bg-success rounded-3 fw-semibold">Низкий</span>'
-                            : '' ?>
-                          </div>
-                        </td>
     <td class="border-bottom-0">
         <div class="d-flex align-items-center gap-2">
             <?=

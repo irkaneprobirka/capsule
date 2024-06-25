@@ -6,6 +6,7 @@ use app\models\Season;
 use app\models\Type;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
+use yii\bootstrap5\LinkPager;
 use yii\widgets\ListView;
 
 /** @var yii\web\View $this */
@@ -32,7 +33,8 @@ use yii\widgets\ListView;
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'itemOptions' => ['class' => 'item'],
-        'layout' => "<div class='d-flex flex-wrap '>{items}</div>",
+        'pager' => ['class' => LinkPager::class],
+        'layout' => "{pager}\n<div class='d-flex flex-wrap '>{items}</div>\n{pager}",
         'itemView' => 'item',
     ]) ?>
 

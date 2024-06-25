@@ -98,24 +98,29 @@ class StylistController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model->password = null;
+        $modelStylist = new Stylist();
 
         // $auth = Yii::$app->authManager;
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-
-            $model->password = Yii::$app->security->generatePasswordHash($model->password);
             if ($model->save()) {
                 $auth = Yii::$app->authManager;
                 $auth->revokeAll($model->id);
                 $role = $auth->getRole($model->rbac_role);
                 $auth->assign($role, $model->id);
             }
-            return $this->redirect(['view', 'id' => $model->id]);
+        }
+        if ($this->request->isPost && $modelStylist->load($this->request->post())) {
+            $modelStylist->user_id = $model->id;
+            if ($modelStylist->save()) {
+                Yii::$app->session->setFlash('success', 'Категория успешно назначена');
+                return $this->redirect(['index', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
+            'modelStylist' => $modelStylist,
             'roles' => User::getRoles(),
         ]);
     }

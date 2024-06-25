@@ -2,6 +2,7 @@
 
 namespace app\modules\admin;
 
+use Yii;
 use yii\filters\AccessControl;
 
 /**
@@ -32,11 +33,11 @@ class Module extends \yii\base\Module
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'],
-                        // 'matchCallback' => fn () => Yii::$app->user->identity->isAdmin
+                        'roles' => ['@'],
+                        'matchCallback' => fn() => Yii::$app->user->can('canAdmin')
                     ],
                 ],
-                // 'denyCallback' => fn () => $this->goHome(),
+                'denyCallback' => fn() => Yii::$app->response->redirect('/')
             ],
         ];
     }

@@ -27,17 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1 class='d-flex justify-content-center '><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <? Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <? LookComment::find()->where(['look_id' => $model->id])->all() == null
-            ? Html::a('Удалить образ', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => 'Вы уверены, что хотите удалить?',
-                    'method' => 'post',
-                ],
-            ]) : '' ?>
-    </p>
     <?php
     $lookItems = LookItem::find()->where(['look_id' => $model->id])->all();
     $clothesIds = [];

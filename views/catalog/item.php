@@ -12,11 +12,11 @@ use app\models\Type;
 use app\models\User;
 use yii\bootstrap5\Html;
 use yii\widgets\ListView;
+use app\models\Look;
 
 ?>
 
-
-<div class="card d-flex flex-row post-card" style="height: 34rem; width: 60rem;">
+<div class="card d-flex flex-row post-card" style="height: 38rem; width: 60rem;">
     <?php
     $lookItems = LookItem::find()->where(['look_id' => $model->id])->all();
     $clothesIds = [];
@@ -27,8 +27,19 @@ use yii\widgets\ListView;
 
     $carouselId = 'carousel-' . $model->id; // Уникальный идентификатор слайдера
 
+    // Проверяем, добавлен ли образ пользователем
+    $isLookAdded = Look::find()->where([ 'user_id' => Yii::$app->user->id, 'is_copied' => 1, 'title' => $model->title])->all();
     ?>
     <div class="carousel slide" data-bs-ride="carousel" id="<?= $carouselId ?>" style="height: 30rem; width: 30rem;">
+    <?php if(!Yii::$app->user->isGuest && $model->user_id != Yii::$app->user->id && $isLookAdded): ?>
+    <div class="star-icon position-absolute z-3 top-0 start-0 m-2 rounded-circle d-flex justify-content-center align-items-center" style="background: #ffb32d; width:2.5rem; height:2.5rem;">
+        <!-- SVG icon from http://tabler-icons.io/i/star -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="white" class="icon icon-tabler icons-tabler-filled icon-tabler-star">
+            <path stroke="none" d="M0 0h24v24H0z" fill="#ffb32d" />
+            <path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z" />
+        </svg>
+    </div>
+    <?php endif;?>
         <div class="carousel-inner">
             <?php foreach ($clothes as $key => $cloth) : ?>
                 <div class="carousel-item <?= ($key == 0) ? 'active' : '' ?>">
@@ -55,14 +66,14 @@ use yii\widgets\ListView;
         </div>
         <p class="card-text p-3" style="font-size:medium;"><?= Html::encode($model->description) ?></p>
         <p class="card-text p-3"><?= Html::encode($model->cost) . ' рублей' ?></p>
-        <?php if(!Yii::$app->user->isGuest && $model->user_id != Yii::$app->user->id):?>
-        <p class="card-text" style="font-size:medium;">Вам понравился образ? Добавьте его в свою коллекцию!</p>
-        <?php endif;?>
+        <?php if (!Yii::$app->user->isGuest && $model->user_id != Yii::$app->user->id): ?>
+            <p class="card-text" style="font-size:medium;">Вам понравился образ? Добавьте его в свою коллекцию!</p>
+        <?php endif; ?>
         <div class="d-flex flex-row">
-            <?= Html::a('Подробнее', ['view', 'id' => $model->id], ['class' => 'btn btn-primary w-50 m-1']) ?>
-            <?= !Yii::$app->user->isGuest  && $model->user_id != Yii::$app->user->id
-                ? Html::a('Добавить образ', ['plus', 'id' => $model->id], ['class' => 'btn btn-primary w-50 m-1'])
-                : '' ?>
+            <?= Html::a('Подробнее', ['view', 'id' => $model->id], ['class' => 'btn btn-primary w-50 m-1 mb-2']) ?>
+            <?php if (!Yii::$app->user->isGuest && $model->user_id != Yii::$app->user->id && !$isLookAdded): ?>
+                <?= Html::a('Добавить', ['plus', 'id' => $model->id], ['class' => 'btn btn-primary w-50 m-1 mb-2']) ?>
+            <?php endif; ?>
         </div>
         <div class="d-flex flex-wrap justify-content-between p-3 w-100">
             <div class='d-inline-block like' data-id="<?= $model->id ?>">
@@ -100,7 +111,7 @@ use yii\widgets\ListView;
     </div>
 </div>
 
-<?php 
+<?php
 $this->registerCssFile('/css/index.css', ['depends' => [
     AppAsset::class,
 ]]);

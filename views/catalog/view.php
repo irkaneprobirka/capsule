@@ -5,13 +5,17 @@ use app\models\Age;
 use app\models\Clothes;
 use app\models\Description;
 use app\models\Gender;
+use app\models\Look;
 use app\models\LookComment;
 use app\models\LookItem;
 use app\models\Season;
 use app\models\Type;
 use app\models\User;
+use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\widgets\ListView;
+use yii\widgets\Pjax;
 
 /** @var yii\web\View $this */
 /** @var app\models\Look $model */
@@ -20,12 +24,17 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Looks', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$isLookAdded = Look::find()->where(['user_id' => Yii::$app->user->id, 'is_copied' => 1, 'title' => $model->title])->all();
 ?>
 <div class="look-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <?php Pjax::begin([
+        'id' => 'catalog-view-pjax',
+    ]) ?>
 
-    <div class="card d-flex flex-row post-card" style="height: 34rem; width: 60rem;">
+    <h3 class="d-flex justify-content-center"><?= Html::encode($this->title) ?></h3>
+
+    <div class="card d-flex flex-row post-card justify-content-center m-auto" style="height: 38rem; width: 60rem;">
         <?php
         $lookItems = LookItem::find()->where(['look_id' => $model->id])->all();
         $clothesIds = [];
@@ -42,13 +51,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php foreach ($clothes as $key => $cloth) : ?>
                     <div class="carousel-item  <?= ($key == 0) ? 'active' : '' ?>">
                         <?= Html::img('@web/img/' . $cloth->image_clothes, ['class' => 'd-flex flex-column m-auto mt-5', 'style' => 'height: 15rem; width: 15rem;']) ?>
-                        <h3 class="card-title d-flex m-auto"><a href="#"><?= Html::encode($cloth->title) ?></a></h3>
+                        <h4 class="d-flex justify-content-center mt-3 mb-3 m-auto"><?= Html::encode($cloth->title) ?></h4>
                         <div class="d-flex flex-wrap justify-content-center p-3 mt-3 mb-3">
                             <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill m-1"><?= Season::getSeason()[Description::findOne($cloth->description_id)->season_id] ?></span>
                             <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill m-1"><?= Type::getType()[Description::findOne($cloth->description_id)->type_id] ?></span>
                             <span class="badge bg-primary-subtle text-primary-emphasis  rounded-pill m-1"><?= Age::getAge()[Description::findOne($cloth->description_id)->age_id] ?></span>
                             <span class="badge bg-primary-subtle text-primary-emphasis  rounded-pill m-1"><?= Gender::getGender()[Description::findOne($cloth->description_id)->gender_id] ?></span>
                         </div>
+                        <p class="px-3 mx-3" style="font-size: 16px;">Стоимость вещи - <?= $cloth->cost . ' рублей' ?></p>
+                        <p class="px-3 mx-3" style="font-size: 16px;">Можно купить в магазинах бренда - <?= $cloth->brand ?></p>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -75,8 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <p class="card-text" style="font-size:medium;">Вам понравился образ? Добавьте его в свою коллекцию!</p>
             <?php endif; ?>
             <div class="d-flex flex-row">
-                <?= Html::a('Подробнее', ['view', 'id' => $model->id], ['class' => 'btn btn-primary w-50 m-1']) ?>
-                <?= !Yii::$app->user->isGuest  && $model->user_id != Yii::$app->user->id
+                <?= !Yii::$app->user->isGuest && $model->user_id != Yii::$app->user->id && !$isLookAdded
                     ? Html::a('Добавить образ', ['plus', 'id' => $model->id], ['class' => 'btn btn-primary w-50 m-1'])
                     : '' ?>
             </div>
@@ -116,27 +126,53 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
+    <?php if (!$model->is_copied == 1 && !Yii::$app->user->isGuest) : ?>
+        <?php $form = ActiveForm::begin(['action' => ['create-comment', 'look_id' => $model->id], 'options' => ['class' => 'w-75 m-auto']]); ?>
+
+        <?= $form->field($commentModel, 'comment')->textarea(['rows' => 6]) ?>
+
+        <?= $form->field($commentModel, 'parent_id')->hiddenInput()->label(false) ?>
+
+
+        <div class="form-group">
+            <?= Html::submitButton('Отправить', ['class' => 'btn btn-success']) ?>
+        </div>
+
+        <?php
+        $commentdataProvider = new \yii\data\ActiveDataProvider([
+            'query' => LookComment::find()->where(['look_id' => $model->id]),
+        ]);
+        ?>
+
+        <?= ListView::widget([
+            'dataProvider' => $commentdataProvider,
+            'itemOptions' => ['class' => 'item'],
+            'layout' => "<div class='d-flex toast show w-100 mt-3 flex-column'>{items}</div>",
+            'itemView' => 'itemComment', // Представление для каждого комментария
+        ]) ?>
+
+        <?php ActiveForm::end(); ?>
+    <?php endif; ?>
+    <?php Pjax::end() ?>
+
     <?php
     $this->registerCssFile('/css/index.css', ['depends' => [
         AppAsset::class,
     ]]);
     ?>
 
-
-    <? DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'title',
-            'description',
-            'like',
-            'dislike',
-            'cost',
-            'user_id',
-            'created_at',
-            'description_id',
-            'is_active',
-        ],
-    ]) ?>
-
 </div>
+
+<?php
+// JavaScript для обработки нажатия на ссылку "Ответить"
+$js = <<<JS
+$(document).ready(function() {
+    $('.reply').click(function(e) {
+        e.preventDefault();
+        var parentId = $(this).data('parent');
+        $('#lookcomment-parent_id').val(parentId); // скрытое поле для parent_id имеет id="lookcomment-parent_id"
+    });
+});
+JS;
+$this->registerJs($js);
+?>

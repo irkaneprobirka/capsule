@@ -43,10 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <h6 class='fw-semibold mb-0'>Роль пользователя</h6>
         </th>
         <th class='border-bottom-0'>
-            <h6 class='fw-semibold mb-0'>Действия</h6>
+            <h6 class='fw-semibold mb-0'>Категория</h6>
         </th>
         <th class='border-bottom-0'>
-        <h6 class='fw-semibold mb-0'>Категория</h6>
+        <h6 class='fw-semibold mb-0'>Действия</h6>
     </th>
     </tr>
 </thead>

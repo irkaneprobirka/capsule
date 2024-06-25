@@ -2,6 +2,7 @@
 
 namespace app\modules\account\models;
 
+use app\models\Description;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Look;
@@ -12,6 +13,8 @@ use Yii;
  */
 class LookSearch extends Look
 {
+
+    
     /**
      * {@inheritdoc}
      */
@@ -41,14 +44,29 @@ class LookSearch extends Look
      */
     public function search($params)
     {
-        $query = Look::find();
+        $query = Look::find()->joinWith('description');
 
+        if ($age_id = Yii::$app->request->get('age_id')) {
+            $query->andWhere(['description.age_id' => $age_id]);
+        }
+
+        if ($gender_id = Yii::$app->request->get('gender_id')) {
+            $query->andWhere(['description.gender_id' => $gender_id]);
+        }
+
+        if ($season_id = Yii::$app->request->get('season_id')) {
+            $query->andWhere(['description.season_id' => $season_id]);
+        }
+
+        if ($type_id = Yii::$app->request->get('type_id')) {
+            $query->andWhere(['description.type_id' => $type_id]);
+        }
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 8,
+                'pageSize' => 6,
             ],
             'sort' => [
                 'defaultOrder' => [
@@ -75,6 +93,7 @@ class LookSearch extends Look
             'created_at' => $this->created_at,
             'description_id' => $this->description_id,
             'is_active' => $this->is_active,
+            'age' => $this->age,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])

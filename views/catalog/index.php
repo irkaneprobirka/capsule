@@ -15,19 +15,20 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="look-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
+<div class="d-flex flex-wrap justify-content-center mb-3">
     <p>
-        <? Html::a('Create Look', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Вернуться на главную', ['/site/index'], ['class' => 'btn btn-success rounded-pill']) ?>
     </p>
+    <h2 class="mx-5"><?= Html::encode($this->title) ?></h2>
+    </div>
 
     <?php Pjax::begin(); ?>
-    <?php $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'itemOptions' => ['class' => 'item'],
-        'layout' => '<div class="d-flex justify-content-center">{items}</div>',
+        'layout' => '<div class="d-flex justify-content-center mt-3 flex-column">{items}</div>',
         'itemView' => 'item',
     ]) ?>
 

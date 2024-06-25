@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Look;
 use app\models\CatalogSearch;
 use app\models\Description;
+use app\models\LookComment;
 use app\models\LookItem;
 use Yii;
 use yii\web\Controller;
@@ -59,8 +60,35 @@ class CatalogController extends Controller
      */
     public function actionView($id)
     {
+        $commentModel = new LookComment();
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'commentModel' => $commentModel,
+        ]);
+    }
+
+    public function actionCreateComment($look_id)
+    {
+        $commentModel = new LookComment();
+        $commentModel->look_id = $look_id;
+
+        if ($commentModel->load(Yii::$app->request->post())) {
+            $commentModel->user_id = Yii::$app->user->identity->id;
+            if ($commentModel->save()) {
+                Yii::$app->session->setFlash('success', 'Комментарий добавлен успешно.');
+                return $this->redirect(['view', 'id' => $look_id]);
+            }
+        }
+
+        $dataProvider = new \yii\data\ActiveDataProvider([
+            'query' => LookComment::find()->where(['look_id' => $look_id]),
+        ]);
+
+        // Если сохранение не удалось, либо это GET запрос, отобразите форму снова
+        return $this->render('create-comment', [
+            'model' => $this->findModel($look_id),
+            'commentModel' => $commentModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

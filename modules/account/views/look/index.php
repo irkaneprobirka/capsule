@@ -16,14 +16,15 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="look-index">
 
-    <h1 class="d-flex justify-content-center"><?= Html::encode($this->title) ?></h1>
-
+<div class="d-flex flex-wrap justify-content-center mb-3">
     <p>
-        <?= Html::a('Создайте свой образ', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить образ', ['create'], ['class' => 'btn btn-success rounded-pill']) ?>
     </p>
+    <h3 class="mx-5"><?= Html::encode($this->title) ?></h3>
+    </div>
 
     <?php Pjax::begin(['id' => 'catalog-pjax']); ?>
-    <?php $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= ListView::widget([
         'dataProvider' => $dataProvider,

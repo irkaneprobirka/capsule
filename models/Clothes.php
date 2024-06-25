@@ -62,14 +62,19 @@ class Clothes extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
+            'title' => 'Название',
             'user_id' => 'User ID',
-            'image_clothes' => 'Image Clothes',
-            'category_clothes_id' => 'Category Clothes ID',
-            'created_at' => 'Created At',
-            'cost' => 'Cost',
+            'image_clothes' => 'Изображение',
+            'category_clothes_id' => 'Категория',
+            'created_at' => 'Дата добавления',
+            'cost' => 'Стоимость',
             'description_id' => 'Description ID',
-            'brand' => 'Brand',
+            'brand' => 'Бренд',
+            'season' => 'Сезон',
+            'age' => 'Возраст',
+            'type' => 'Тип',
+            'gender' => 'Пол',
+            'imageFile' => 'Изображение',
         ];
     }
 

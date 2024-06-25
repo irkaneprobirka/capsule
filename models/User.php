@@ -76,6 +76,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'password' => 'Password',
             'role_id' => 'Role ID',
             'auth_key' => 'Auth Key',
+            'rbac_role' => 'Роль пользователя'
         ];
     }
 

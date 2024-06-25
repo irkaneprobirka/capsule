@@ -26,22 +26,19 @@ use yii\helpers\VarDumper;
                             <?= $model->status_id == 2
                             ? '<span class="badge bg-danger rounded-3 fw-semibold">Высокий</span>'
                             : '' ?>
-                            <?= $model->status_id == 3
-                            ? '<span class="badge bg-success rounded-3 fw-semibold">Низкий</span>'
-                            : '' ?>
                           </div>
                         </td>
     <td class="border-bottom-0 w-25">
         <div class="d-flex align-items-center gap-2">
             <?= $model->status_id == 1
                 ?
-                Html::a('Принять в работу', ['deny', 'id' => $model->id], ['class' => 'btn btn-outline-primary m-1'])
+                Html::a('Принять в работу', ['deny', 'id' => $model->id], ['class' => 'btn btn-outline-warning rounded-pill m-1'])
                 : '' ?>
             <?=
-            Html::a('Просмотр', ['view', 'id' => $model->id], ['class' => 'btn btn-outline-info m-1'])
+            Html::a('Просмотр', ['view', 'id' => $model->id], ['class' => 'btn btn-outline-info rounded-pill m-1'])
             ?>
             <?= $model->status_id == 2
-                ? Html::a('Выполнить заказ', ['apply', 'id' => $model->id], ['class' => 'btn btn-outline-primary m-1'])
+                ? Html::a('Выполнить заказ', ['apply', 'id' => $model->id], ['class' => 'btn btn-outline-success rounded-pill m-1'])
                 : '' ?>
         </div>
     </td>

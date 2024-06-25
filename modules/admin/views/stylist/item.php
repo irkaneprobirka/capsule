@@ -26,31 +26,6 @@ use function PHPSTORM_META\type;
     </td>
     <td class="border-bottom-0 w-25">
         <div class="d-flex align-items-center gap-2">
-            <?=
-            Html::a('Просмотр', ['view', 'id' => $model->id], ['class' => 'btn btn-outline-info m-1'])
-                .
-                Html::a('Назначить роль', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-primary m-1'])
-            ?>
-            <?php
-            $res = Stylist::find()
-                ->where(['user_id' => $model->id])
-                ->andWhere(['!=', 'id', $model->id])
-                ->count();
-            // VarDumper::dump($res, 10, true);
-            if (!$res && $roles == 'Роль стилиста') {
-                echo Html::a('Назначить категорию', ['stylist', 'id' => $model->id], ['class' => 'btn btn-outline-primary m-1']);
-            } else {
-                // echo 'Не назначено';
-            }
-            ?>
-            <?= $roles == 'Роль стилиста' && Stylist::find()->where(['user_id' => null])->one()
-                ? Html::a('Назначить категорию', ['stylist', 'id' => $model->id], ['class' => 'btn btn-outline-primary m-1'])
-                : '' ?>
-
-        </div>
-    </td>
-    <td class="border-bottom-0 w-25">
-        <div class="d-flex align-items-center gap-2">
             <?php
             $res = Stylist::find()
                 ->where(['user_id' => $model->id])
@@ -62,8 +37,15 @@ use function PHPSTORM_META\type;
                 $category = CategoryStylist::getStylistCategory()[$stylist];
                 echo $category;
             } else {
-                echo 'Не назначено';
+                echo '';
             }
+            ?>
+        </div>
+    </td>
+    <td class="border-bottom-0 w-25">
+        <div class="d-flex align-items-center gap-2">
+            <?=
+                Html::a('Назначить роль', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-primary m-1'])
             ?>
         </div>
     </td>

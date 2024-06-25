@@ -31,7 +31,7 @@ class Stylist extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'category_stylist_id'], 'required'],
+            [['user_id', 'category_stylist_id', 'description'], 'required'],
             [['user_id', 'category_stylist_id'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
             [['category_stylist_id'], 'exist', 'skipOnError' => true, 'targetClass' => CategoryStylist::class, 'targetAttribute' => ['category_stylist_id' => 'id']],
@@ -46,7 +46,8 @@ class Stylist extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'category_stylist_id' => 'Category Stylist ID',
+            'category_stylist_id' => 'Категория стилиста',
+            'description' => 'Краткая биография'
         ];
     }
 

@@ -100,7 +100,7 @@ class OrderController extends Controller
         $model->status_id = 2;
         if ($model->save()) {
             Yii::$app->session->setFlash('success', 'Заявка успешно принята в работу');
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index', 'id' => $model->id]);
         }
     }
 

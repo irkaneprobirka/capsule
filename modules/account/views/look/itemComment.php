@@ -5,9 +5,8 @@ use app\models\User;
 use yii\bootstrap5\Html;
 use yii\helpers\VarDumper;
 
-$parentCommentUser = $model->parent_id ? $model->parent->user : null;
+$parentCommentUser = $model->parent_id ? LookComment::findOne($model->parent_id)->user : null;
 $childrenComment = LookComment::find()->where(['parent_id' => $model->id])->all();
-// VarDumper::dump($parentCommentUser, 10, true);die;
 
 ?>
 
@@ -16,19 +15,17 @@ $childrenComment = LookComment::find()->where(['parent_id' => $model->id])->all(
 $renderedMainComments = [];
 ?>
 <?php if ($model->parent_id == null) : ?>
-    <div class="toast show w-75 m-auto mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" data-bs-toggle="toast">
+    <div class="toast show w-75 m-auto mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" data-bs-toggle="toast" id="comment-<?= $model->id ?>">
         <div class="toast-header">
             <p>#<?= Html::encode($model->id) . ' ' ?></p>
-            <!-- <span class="avatar avatar-xs me-2" style="background-image: url(...)"></span> -->
             <?= Html::img('@web/img/' . User::findOne($model->user_id)->image_profile, ['class' => 'avatar avatar-xs me-2 mx-3 rounded-5', 'style' => 'width: 3rem; height: 3rem;']) ?>
             <strong class="me-auto"><?= Html::encode(User::findOne($model->user_id)->login) ?></strong>
             <?= Html::a('Ответить', '#', ['class' => 'reply', 'data-parent' => $model->id]) ?>
-            <!-- <button type="button" class="ms-2 btn-close" data-bs-dismiss="toast" aria-label="Close"></button> -->
         </div>
         <div class="toast-body">
             <p class="d-flex justify-content-end">
                 <?php if ($parentCommentUser) : ?>
-                    <span class="reply-to">Ответ на комментарий пользователя <?= Html::encode($parentCommentUser->login) . ' #' . $model->parent->id ?></span>
+                    <span class="reply-to">Ответ на комментарий пользователя <?= Html::encode($parentCommentUser->login) . Html::a(' #' . $model->parent_id, '#comment-' . $model->parent_id) ?></span>
                 <?php endif; ?>
             </p>
             <?= Html::encode($model->comment) ?>
@@ -37,24 +34,22 @@ $renderedMainComments = [];
             </div>
         </div>
     </div>
-    <?php array_push($renderedMainComments, $model->id) ?>
-    
+    <?php $renderedMainComments[$model->id] = true; ?>
 <?php endif; ?>
+
 <?php if ($childrenComment) : ?>
     <?php foreach ($childrenComment as $key => $child) : ?>
-        <div class="toast show w-75 m-auto mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" data-bs-toggle="toast">
+        <div class="toast show w-75 m-auto mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" data-bs-toggle="toast" id="comment-<?= $child->id ?>">
             <div class="toast-header">
                 <p>#<?= Html::encode($child->id) . ' ' ?></p>
-                <!-- <span class="avatar avatar-xs me-2" style="background-image: url(...)"></span> -->
                 <?= Html::img('@web/img/' . User::findOne($child->user_id)->image_profile, ['class' => 'avatar avatar-xs me-2 rounded-5 mx-3', 'style' => 'width: 3rem; height: 3rem;']) ?>
                 <strong class="me-auto"><?= Html::encode(User::findOne($child->user_id)->login) ?></strong>
-                <?= Html::a('Ответить', '#', ['class' => 'reply', 'data-parent' => $model->id]) ?>
-                <!-- <button type="button" class="ms-2 btn-close" data-bs-dismiss="toast" aria-label="Close"></button> -->
+                <?= Html::a('Ответить', '#', ['class' => 'reply', 'data-parent' => $child->id]) ?>
             </div>
             <div class="toast-body">
                 <p class="d-flex justify-content-end">
                     <?php if ($child->parent_id) : ?>
-                        <span class="reply-to">Ответ на комментарий пользователя <?= User::findOne(LookComment::findOne($child->parent_id)->user_id)->login . ' #' . LookComment::findOne($child->parent_id)->id ?></span>
+                        <span class="reply-to">Ответ на комментарий пользователя <?= User::findOne(LookComment::findOne($child->parent_id)->user_id)->login . Html::a(' #' . $child->parent_id, '#comment-' . $child->parent_id) ?></span>
                     <?php endif; ?>
                 </p>
                 <?= Html::encode($child->comment) ?>
@@ -63,6 +58,6 @@ $renderedMainComments = [];
                 </div>
             </div>
         </div>
-        <?php array_push($renderedMainComments, $child->id) ?>
+        <?php $renderedMainComments[$child->id] = true; ?>
     <?php endforeach; ?>
 <?php endif; ?>

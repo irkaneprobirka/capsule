@@ -16,6 +16,7 @@ $config = [
     'modules' => [
         'admin-panel' => [
             'class' => 'app\modules\admin\Module',
+            'defaultRoute' => 'stylist'
         ],
         'account' => [
             'class' => 'app\modules\account\Module',

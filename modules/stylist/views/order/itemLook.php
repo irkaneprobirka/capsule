@@ -14,7 +14,9 @@ use yii\helpers\VarDumper;
 $this->registerCssFile('@web/css/sliderLook.css', ['depends' => [yii\bootstrap5\BootstrapAsset::class]]);
 ?>
 
-<div class="card rounded-3 " style="width: 18rem; height: 33rem;">
+
+
+<div class="card d-flex flex-row post-card" style="height: 34rem; width: 60rem;">
     <?php
     $lookItems = LookItem::find()->where(['look_id' => $model->id])->all();
     $clothesIds = [];
@@ -23,14 +25,21 @@ $this->registerCssFile('@web/css/sliderLook.css', ['depends' => [yii\bootstrap5\
     }
     $clothes = Clothes::find()->where(['id' => $clothesIds])->all();
 
-    $carouselId = 'carousel-' . uniqid(); // Уникальный идентификатор слайдера
+    $carouselId = 'carousel-' . $model->id; // Уникальный идентификатор слайдера
 
     ?>
-    <div class="carousel slide" data-bs-ride="carousel" id="<?= $carouselId ?>" style="height: 18rem;">
+    <div class="carousel slide" data-bs-ride="carousel" id="<?= $carouselId ?>" style="height: 30rem; width: 30rem;">
         <div class="carousel-inner">
             <?php foreach ($clothes as $key => $cloth) : ?>
                 <div class="carousel-item <?= ($key == 0) ? 'active' : '' ?>">
-                    <?= Html::img('@web/img/' . $cloth->image_clothes, ['class' => 'd-block w-100 rounded-3']) ?>
+                    <?= Html::img('@web/img/' . $cloth->image_clothes, ['class' => 'd-flex m-auto justify-content-center', 'style' => 'height: 25rem;width: 30rem; object-fit:cover;']) ?>
+                    <h3 class="card-title text-center mt-3"><a href="#"><?= Html::encode($cloth->title) ?></a></h3>
+                    <div class="d-flex flex-wrap mb-3 justify-content-center">
+                        <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill m-1"><?= Season::getSeason()[Description::findOne($cloth->description_id)->season_id] ?></span>
+                        <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill m-1"><?= Type::getType()[Description::findOne($cloth->description_id)->type_id] ?></span>
+                        <span class="badge bg-primary-subtle text-primary-emphasis  rounded-pill m-1"><?= Age::getAge()[Description::findOne($cloth->description_id)->age_id] ?></span>
+                        <span class="badge bg-primary-subtle text-primary-emphasis  rounded-pill m-1"><?= Gender::getGender()[Description::findOne($cloth->description_id)->gender_id] ?></span>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -43,32 +52,15 @@ $this->registerCssFile('@web/css/sliderLook.css', ['depends' => [yii\bootstrap5\
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-
-    <div class="card-body">
-        <h5 class="card-title"><?= Html::encode($model->title) ?></h5>
+    <div class="card-body d-flex flex-column" style="width: 30rem;">
+        <h3 class="card-title"><a href="#"><?= Html::encode($model->title) ?></a></h3>
         <div class="d-flex flex-wrap mb-3">
-            <div class="d-flex flex-wrap mb-3">
-                <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill m-1"><?= Season::getSeason()[Description::findOne($model->description_id)->season_id] ?></span>
-                <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill m-1"><?= Type::getType()[Description::findOne($model->description_id)->type_id] ?></span>
-                <span class="badge bg-primary-subtle text-primary-emphasis  rounded-pill m-1"><?= Age::getAge()[Description::findOne($model->description_id)->age_id] ?></span>
-                <span class="badge bg-primary-subtle text-primary-emphasis  rounded-pill m-1"><?= Gender::getGender()[Description::findOne($model->description_id)->gender_id] ?></span>
-            </div>
-            <div class="d-flex flex-wrap justify-content-between m-3 w-100">
-                <div class='d-inline-block mx-2 like' data-id="<?= $model->id ?>">
-                    <span class="count-like"><?= $model->like ?></span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="pink" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
-                    </svg>
-                </div>
-                <div class='d-inline-block mx-2 dislike' data-id="<?= $model->id ?>">
-                    <span class="count-dislike"><?= $model->dislike ?></span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="pink" class="bi bi-heartbreak-fill" viewBox="0 0 16 16">
-                        <path d="M8.931.586 7 3l1.5 4-2 3L8 15C22.534 5.396 13.757-2.21 8.931.586M7.358.77 5.5 3 7 7l-1.5 3 1.815 4.537C-6.533 4.96 2.685-2.467 7.358.77" />
-                    </svg>
-                </div>
-            </div>
-            <?= Html::a('Подробнее', ['/account/look/view', 'id' => $model->id], ['class' => 'btn btn-outline-primary opacity-50 w-100']) ?>
+            <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill m-1"><?= Season::getSeason()[Description::findOne($model->description_id)->season_id] ?></span>
+            <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill m-1"><?= Type::getType()[Description::findOne($model->description_id)->type_id] ?></span>
+            <span class="badge bg-primary-subtle text-primary-emphasis  rounded-pill m-1"><?= Age::getAge()[Description::findOne($model->description_id)->age_id] ?></span>
+            <span class="badge bg-primary-subtle text-primary-emphasis  rounded-pill m-1"><?= Gender::getGender()[Description::findOne($model->description_id)->gender_id] ?></span>
         </div>
+        <p class="card-text p-3" style="font-size:medium;"><?= Html::encode($model->description) ?></p>
+        <p class="card-text p-3"><?= Html::encode($model->cost) . ' рублей' ?></p>
     </div>
 </div>
-

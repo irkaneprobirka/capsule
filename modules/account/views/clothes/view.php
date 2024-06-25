@@ -20,8 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="clothes-view">
 
-  <h1><?= Html::encode($this->title) ?></h1>
-
   <div class="card mb-3 rounded rounded-3 shadow-lg bg-white rounded" style="max-width: 900px;">
     <div class="row g-0">
       <div class="col">
@@ -29,17 +27,19 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
       <div class="col">
         <div class="card-body">
-          <h5 class="card-title"><?= Html::encode($model->title) ?></h5>
-          <div class="d-flex flex-wrap mb-3">
-            <span class="badge bg-info rounded-pill m-1"><?= Season::getSeason()[Description::findOne($model->description_id)->season_id] ?></span>
-            <span class="badge bg-info rounded-pill m-1"><?= Type::getType()[Description::findOne($model->description_id)->type_id] ?></span>
-            <span class="badge bg-info rounded-pill m-1"><?= Age::getAge()[Description::findOne($model->description_id)->age_id] ?></span>
-            <span class="badge bg-info rounded-pill m-1"><?= Gender::getGender()[Description::findOne($model->description_id)->gender_id] ?></span>
+          <h4 class="card-titlec text-center"><?= Html::encode($model->title) ?></h4>
+          <div class="d-flex flex-wrap justify-content-center mb-3">
+            <span class="badge bg-primary rounded-pill m-1"><?= Season::getSeason()[Description::findOne($model->description_id)->season_id] ?></span>
+            <span class="badge bg-primary rounded-pill m-1"><?= Type::getType()[Description::findOne($model->description_id)->type_id] ?></span>
+            <span class="badge bg-primary rounded-pill m-1"><?= Age::getAge()[Description::findOne($model->description_id)->age_id] ?></span>
+            <span class="badge bg-primary rounded-pill m-1"><?= Gender::getGender()[Description::findOne($model->description_id)->gender_id] ?></span>
           </div>
-          <p>
-            <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+          <p class="p-3" style="font-size: 18px;">Стоимость вещи - <?= $model->cost . ' рублей' ?></p>
+          <p class="p-3" style="font-size: 18px;">Можно купить в магазинах бренда - <?= $model->brand ?></p>
+          <p class="d-flex justify-content-center mt-5">
+            <?= Html::a('Назад', ['index', 'id' => $model->id], ['class' => 'btn btn-primary rounded-pill']) ?>
             <?= Html::a('Удалить вещь', ['delete', 'id' => $model->id], [
-              'class' => 'btn btn-danger',
+              'class' => 'btn btn-danger rounded-pill',
               'data' => [
                 'confirm' => 'Вы уверены что хотите удалить вещь? Будут удалены также образы, использующие ее',
                 'method' => 'post',
@@ -50,20 +50,5 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
     </div>
   </div>
-
-  <? DetailView::widget([
-    'model' => $model,
-    'attributes' => [
-      'id',
-      'title',
-      'user_id',
-      'image_clothes',
-      'category_clothes_id',
-      'created_at',
-      'cost',
-      'description_id',
-      'brand',
-    ],
-  ]) ?>
 
 </div>

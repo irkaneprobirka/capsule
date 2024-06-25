@@ -10,6 +10,7 @@ use app\models\LookItem;
 use app\modules\account\models\ClothesSearch;
 use app\modules\account\models\LookSearch;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -53,6 +54,8 @@ class LookController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+
 
     /**
      * Displays a single Look model.

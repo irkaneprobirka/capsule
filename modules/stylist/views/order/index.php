@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
 
     <p>
         <? Html::a('Create Order', ['create'], ['class' => 'btn btn-success']) ?>
@@ -35,8 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'itemOptions' => ['class' => 'item'],
         'layout' => "<div class='card w-100 justify-content-center'><div class='card-body p-4'><div class='table-responsive'>
     <table class='table text-nowrap mb-0 align-middle'><thead class='text-dark fs-4'>
-    <tr><th class='border-bottom-0 w-25'>
-            <h6 class='fw-semibold mb-0'>Id</h6>
+    <tr><th class='border-bottom-0' style='width: 5rem;'>
+            <h6 class='fw-semibold mb-0'>Номер заявки</h6>
         </th>
         <th class='border-bottom-0'>
             <h6 class='fw-semibold mb-0'>Логин пользователя</h6>

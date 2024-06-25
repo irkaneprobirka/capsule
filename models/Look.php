@@ -63,10 +63,15 @@ class Look extends \yii\db\ActiveRecord
             'description' => 'Описание',
             'like' => 'Лайк',
             'dislike' => 'Дизлайк',
-            'cost' => 'Стоимость образа',
+            'cost' => 'Стоимость',
             'user_id' => 'User ID',
-            'created_at' => 'Created At',
-            'description_id' => 'Description ID',
+            'created_at' => 'Дата',
+            'description_id' => 'Критерии',
+            'season' => 'Сезон',
+            'age' => 'Возраст',
+            'type' => 'Тип',
+            'gender' => 'Пол',
+            'imageFile' => 'Изображение',
         ];
     }
 
@@ -75,11 +80,10 @@ class Look extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getDescription0()
+    public function getDescription()
     {
-        return $this->hasOne(Description::class, ['id' => 'description_id']);
+        return $this->hasOne(Description::className(), ['id' => 'description_id']);
     }
-
     /**
      * Gets query for [[LookComments]].
      *

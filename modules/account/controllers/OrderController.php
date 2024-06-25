@@ -7,7 +7,9 @@ use app\models\Order;
 use app\models\Status;
 use app\models\Stylist;
 use app\modules\account\models\OrderSearch;
+use app\modules\admin\models\StylistSearch;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -68,20 +70,33 @@ class OrderController extends Controller
     /**
      * Creates a new Order model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
+     * @return string|\yii\web\Response 
      */
     public function actionCreate()
     {
         $model = new Order();
+        $query = Stylist::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 8,
+            ],
+        ]);
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
                 $model->user_id = Yii::$app->user->identity->id;
+                $clothesIdArray = Yii::$app->request->post('selectedCards');
                 $model->status_id = Status::getStatusId('Новый');
+                $model->stylist_id = (int)$clothesIdArray[0];
                 $stylist = Stylist::find()->where(['user_id' => $model->stylist_id])->one()->category_stylist_id;
                 $model->cost = CategoryStylist::findOne($stylist)->cost;
                 if ($model->save()) {
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    Yii::$app->session->setFlash('success', 'Заказ оформлен!');
+                    return $this->redirect(['index', 'id' => $model->id]);
                 }
             }
         } else {
@@ -90,8 +105,10 @@ class OrderController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'dataProvider' => $dataProvider,
         ]);
     }
+
 
     /**
      * Updates an existing Order model.

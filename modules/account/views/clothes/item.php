@@ -13,7 +13,7 @@ use yii\bootstrap5\Html;
 <div class="card m-3 rounded-3 " style="width: 18rem; height: 30rem;">
   <?= Html::img('@web/img/' . $model->image_clothes, ['class' => 'card-img-top rounded-3', 'style' => 'width: 18rem; height: 16rem;']) ?>
   <div class="card-body">
-    <h5 class="card-title"><?= Html::encode($model->title) ?></h5>
+    <h5 class="card-title" style="height: 3rem;"><?= Html::encode($model->title) ?></h5>
     <div class="d-flex flex-wrap mb-3">
       <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill m-1"><?= Season::getSeason()[Description::findOne($model->description_id)->season_id] ?></span>
       <span class="badge bg-primary-subtle text-primary-emphasis rounded-pill m-1"><?= Type::getType()[Description::findOne($model->description_id)->type_id] ?></span>

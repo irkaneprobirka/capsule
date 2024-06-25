@@ -44,18 +44,37 @@ class OrderSearch extends Order
         $query = Order::find();
 
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'pageSize' => 8,
             ],
-            // 'sort' => [
-            //     'defaultOrder' => [
-            //         'created_at' => SORT_DESC,
-            //     ]
-            // ],
+            'sort' => [
+                'defaultOrder' => [
+                    // Сначала сортируем по статусу
+                    'status_id' => SORT_ASC,
+                ],
+                'attributes' => [
+                    // Добавляем кастомную сортировку для столбца status_id
+                    'status_id' => [
+                        'asc' => [
+                            // Сначала сортируем по статусу 2, потом 1, потом 3
+                            new \yii\db\Expression('CASE WHEN status_id = 2 THEN 0 WHEN status_id = 1 THEN 1 WHEN status_id = 3 THEN 2 ELSE 3 END'),
+                            'status_id' => SORT_ASC,
+                        ],
+                        'desc' => [
+                            new \yii\db\Expression('CASE WHEN status_id = 2 THEN 0 WHEN status_id = 1 THEN 1 WHEN status_id = 3 THEN 2 ELSE 3 END'),
+                            'status_id' => SORT_DESC,
+                        ],
+                        'default' => SORT_ASC,
+                        'label' => 'Status', // Опциональное имя столбца для сортировки в UI
+                    ],
+                    // Добавьте здесь другие атрибуты, если необходимо
+                ],
+            ],
         ]);
+        
+        
 
         $this->load($params);
 

@@ -43,8 +43,8 @@ class CategoryStylist extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'cost' => 'Cost',
+            'title' => 'Навание',
+            'cost' => 'Стоимость услуги',
         ];
     }
 
